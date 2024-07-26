@@ -1,0 +1,70 @@
+/* body{
+    margin-top:150px;
+    text-align: center;
+    background-color: pink;
+} */
+
+/* input{
+height: 30px;
+width: 200px;
+
+} */
+
+button{
+    background-color: pink;
+    border-radius: 10px;
+    border: 30px;
+    border: 4px rgb(238, 62, 121) double;
+    /* transform: rotate(25deg); */
+    animation-name: Jisoo;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    width: 120px;
+    height: 30px;
+    }
+
+    input{
+        background-color: rgba(244, 179, 201, 0.498);
+        border: 2px rgb(238, 62, 121) dotted; 
+        padding: 2px;
+        border-radius: 25px;
+        box-shadow: 3px 3px 6px pink;
+        text-align: center;
+      text-align: center;
+      width: 270px;
+      height: 25px;
+    }
+
+        
+h1{
+    /* background-color: pink  ; */
+    background: linear-gradient(rgba(0, 0, 0, 0.645), rgba(248, 180, 220, 0.982));
+    border: 5px rgb(238, 62, 121) dotted; 
+    }
+    
+    body{
+    background-color: pink;
+    background-size: cover;
+    text-align: center;
+    margin-top: 300px;
+    }
+    input:hover{
+    background-color: rgb(247, 138, 193);
+    padding: 4px;
+    }
+
+h2{
+text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+

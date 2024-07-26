@@ -1,0 +1,101 @@
+html,
+body {
+    height: 100vh; /* to fix the height of the background */
+}
+body {
+    background-image: url(background.jpg);
+    background-size: cover;
+    overflow: hidden;
+}
+#player {
+    width: 220px;
+    height: 230px;
+    position: absolute;
+    left: 0;
+    bottom: 100px;
+}
+#floor {
+    background-image: url(floor.webp);
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.jump {
+    animation-name: jump;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+@keyframes jump {
+    0% {
+        bottom: 100px;
+    }
+    100% {
+        bottom: 250px;
+    }
+}
+#enemy {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    width: 200px;
+    height: 200px;
+    animation-name: drive;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes drive {
+    0% {
+        right: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        right: 100%;
+        transform: translateX(-100%);
+    }
+}
+#overId {
+    font-size: 100px;
+    text-align: center;
+    color: red;
+}
+#result {
+    font-size: 70px;
+    text-align: center;
+    color: rgb(15, 109, 35);
+}
+#best {
+    font-size: 60px;
+    text-align: center;
+    color: rgb(3, 26, 8);
+}
+.coin {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-image: url("https://cdn-icons-png.flaticon.com/512/4784/4784972.png");
+    background-size: cover;
+}
+#levelId {
+    font-size: 30px;
+    text-align: center;
+    color: forestgreen;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+}
+
+#announcement {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: rgb(255, 106, 106);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease-out;
+}
+

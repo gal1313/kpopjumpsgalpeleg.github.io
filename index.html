@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/10833/10833101.png" type="image/x-icon">
+    <style>
+        body {
+            height: 100vh;
+            background-image: url(background.jpg);
+            background-size: cover;
+            overflow: hidden;
+        }
+        #player {
+            width: 220px;
+            height: 230px;
+            position: absolute;
+            left: 0;
+            bottom: 100px;
+        }
+        #floor {
+            background-image: url(floor.webp);
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        .jump {
+            animation-name: jump;
+            animation-duration: 0.5s;
+            animation-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        @keyframes jump {
+            0% { bottom: 100px; }
+            100% { bottom: 250px; }
+        }
+        #enemy {
+            position: absolute;
+            right: 0;
+            bottom: 50px;
+            width: 200px;
+            height: 200px;
+            animation-name: drive;
+            animation-duration: 1.5s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        @keyframes drive {
+            0% { right: 0; transform: translateX(100%); }
+            100% { right: 100%; transform: translateX(-100%); }
+        }
+        #overId {
+            font-size: 100px;
+            text-align: center;
+            color: red;
+        }
+        #result {
+            font-size: 70px;
+            text-align: center;
+            color: rgb(15, 109, 35);
+        }
+        #best {
+            font-size: 60px;
+            text-align: center;
+            color: rgb(3, 26, 8);
+        }
+        .coin {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background-image: url("https://cdn-icons-png.flaticon.com/512/4784/4784972.png");
+            background-size: cover;
+        }
+        #levelId {
+            font-size: 30px;
+            text-align: center;
+            color: forestgreen;
+            position: absolute;
+            top: 50px;
+            left: 10px;
+        }
+        #announcement {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: white;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="scoreId">score: 0</h1>
+    <h1 id="levelId">LEVEL: 1</h1>
+    <img src="jisoo.png" alt="" id="player">
+    <img src="wonyoung.png" alt="" id="enemy">
+    <div id="floor"></div>
+    <div id="coins"></div>
+    <div id="announcement"></div>
+
+    <script>
+        addEventListener('keydown', checkKey);
+        let player = document.getElementById("player");
+        let enemy = document.getElementById("enemy");
+        let scoreId = document.getElementById("scoreId");
+        let levelId = document.getElementById("levelId");
+        let coins = document.getElementById("coins");
+        let announcement = document.getElementById("announcement");
+        let score = 0;
+        let level = 1;
+        let isJumping = false;
+        let jumpCount = 0;
+        let jumpHeight = 0;
+        const initialJumpHeight = 300;
+        const secondJumpIncrement = 150;
+        let jumpTimer;
+        let moveSpeed = 75;
+        let checkInterval = setInterval(check, 100);
+        let coinInterval = setInterval(generateCoin, 3000);
+
+        const enemyImages = [
+            'wonyoung.png', 'jennie.png', 'rose.png', 'chaoun.gif',
+            'eunchae.gif', 'lalisa.png', 'minnie.png', 'yuqi.png',
+            'sunoo.gif', 'jungwon.png', 'jungwoncrazygirl.png'
+        ];
+        let enemyNames = [
+            'ווניונג', 'ג\'ני', 'רוזה', 'צ\'און', 'אונצ\'ה',
+            'ליסה', 'מיני', 'יוקי', 'סונו', 'ג\'ונג-וון',
+            'ג\'ונגוון ילדת קוקיות'
+        ];
+
+        function checkKey(event) {
+            if (event.key === ' ' || event.key.toLowerCase() === 'w') {
+                if (!isJumping || jumpCount < 2) {
+                    jump();
+                }
+            }
+            if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {
+                moveLeft();
+            }
+            if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {
+                moveRight();
+            }
+            if (event.key.toLowerCase() === 's') {
+                crouch();
+            }
+        }
+
+        function jump() {
+            if (jumpCount >= 2) {
+                return;
+            }
+            isJumping = true;
+            jumpCount++;
+            if (jumpCount === 1) {
+                jumpHeight = initialJumpHeight;
+            } else {
+                jumpHeight += secondJumpIncrement;
+            }
+            player.style.transition = 'bottom 0.5s';
+            player.style.bottom = `${jumpHeight}px`;
+
+            let soundJump = new Audio('jump.wav');
+            soundJump.play();
+
+            clearTimeout(jumpTimer);
+            jumpTimer = setTimeout(() => {
+                isJumping = false;
+                jumpCount = 0;
+                jumpHeight = 0;
+                player.style.transition = 'bottom 0.5s';
+                player.style.bottom = '100px';
+            }, 500);
+        }
+
+        function moveLeft() {
+            let currentLeft = parseInt(window.getComputedStyle(player).left);
+            if (currentLeft > 0) {
+                player.style.left = currentLeft - moveSpeed + 'px';
+            }
+        }
+
+        function moveRight() {
+            let currentLeft = parseInt(window.getComputedStyle(player).left);
+            if (currentLeft < window.innerWidth - player.offsetWidth) {
+                player.style.left = currentLeft + moveSpeed + 'px';
+            }
+        }
+
+        function crouch() {
+            player.style.transition = 'bottom 0.5s';
+            player.style.bottom = '50px';
+
+            setTimeout(() => {
+                player.style.transition = 'bottom 0.5s';
+                player.style.bottom = '100px';
+            }, 500);
+        }
+
+        function check() {
+            if (elementsOverlap(player, enemy)) {
+                clearInterval(checkInterval);
+                clearInterval(coinInterval);
+                let best = localStorage.getItem("best");
+                if (!best || best < score) {
+                    localStorage.setItem('best', score);
+                    best = score;
+                }
+                document.body.innerHTML = `
+                <p id="overId"> Game over ! </p>
+                <p id="result"> your score is : ${score} ! </p>
+                <p id="best"> your best score is : ${best} </p>
+                `;
+            } else if (playerPassedEnemy()) {
+                updateScore();
+            }
+            checkCoinsCollision();
+        }
+
+        function updateScore() {
+            score++;
+            scoreId.textContent = 'score: ' + score;
+            updateLevel();
+        }
+
+        function updateLevel() {
+            let newLevel = Math.floor(score / 15) + 1;
+            if (newLevel !== level) {
+                level = newLevel;
+                levelId.textContent = 'LEVEL: ' + level;
+                changeEnemyImage();
+                if (level % 5 === 1) {
+                    showEnemyName();
+                }
+            }
+        }
+
+        function changeEnemyImage() {
+            let enemyIndex = Math.floor((level - 1) / 5) % enemyImages.length;
+            enemy.src = enemyImages[enemyIndex];
+        }
+
+        function showEnemyName() {
+            let enemyIndex = Math.floor((level - 1) / 5) % enemyNames.length;
+            announcement.textContent = `עכשיו את/ה נגד ${enemyNames[enemyIndex]}`;
+            announcement.style.opacity = 1;
+            setTimeout(() => {
+                announcement.style.opacity = 0;
+            }, 2000);
+        }
+
+        function playerPassedEnemy() {
+            const playerRect = player.getBoundingClientRect();
+            const enemyRect = enemy.getBoundingClientRect();
+            return (playerRect.left > enemyRect.right);
+        }
+
+        function elementsOverlap(el1, el2) {
+            const domRect1 = el1.getBoundingClientRect();
+            const domRect2 = el2.getBoundingClientRect();
+            return !(
+                domRect1.top > domRect2.bottom ||
+                domRect1.right < domRect2.left ||
+                domRect1.bottom < domRect2.top ||
+                domRect1.left > domRect2.right
+            );
+        }
+
+        function generateCoin() {
+            const coin = document.createElement('img');
+            coin.src = 'coin.png';
+            coin.className = 'coin';
+            coin.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            coin.style.bottom = '100px';
+            coins.appendChild(coin);
+        }
+
+        function checkCoinsCollision() {
+            const coinElements = document.getElementsByClassName('coin');
+            Array.from(coinElements).forEach((coin) => {
+                if (elementsOverlap(player, coin)) {
+                    score += 5;
+                    scoreId.textContent = 'score: ' + score;
+                    coin.remove();
+                    updateLevel();
+                }
+            });
+        }
+
+        // Start the game with the initial enemy announcement
+        showEnemyName();
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/10833/10833101.png" type="image/x-icon">
+</head>
+<body dir="rtl">
+
+<h2>הרשמה</h2>
+<input type="text" placeholder="הכנס שם משתמש" id="username">
+<br><br>
+<input type="password" name="" id="password" placeholder="הכנס סיסמא">
+<br><br>
+<input type="text" name="" placeholder="הכנס את שמך" id="nickname">
+<br><br>
+<button onclick="register()">הרשמה</button>
+<Script>
+    function register(){
+let username = document.getElementById("username").value  
+let password = document.getElementById("password").value  
+let nickname = document.getElementById("nickname").value  
+
+localStorage.setItem("username",username)
+localStorage.setItem("password",password)
+
+localStorage.setItem("nickname",nickname)
+window.location = 'login.html'
+}
+</Script>
+
+
+</body>
+</html>

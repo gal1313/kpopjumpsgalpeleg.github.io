@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התחברות</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/10833/10833101.png" type="image/x-icon">
+
+</head>
+<body dir="rtl">
+<h2>התחבר</h2>
+<input type="text" placeholder="הכנס שם משתמש" id="login-username">
+<br><br>
+<input type="password" name="" id="login-password" placeholder="הכנס סיסמא">
+<br><br>
+<button onclick="login()">התחבר</button>
+<br>
+<button onclick="move()">לא רשום? הירשם</button>
+<br>
+
+
+<script>
+     
+    function login(){
+        let username = document.getElementById("login-username").value;
+        let password = document.getElementById("login-password").value;
+
+        let storedUsername = localStorage.getItem("username");
+        let storedPassword = localStorage.getItem("password");
+
+        if(username === storedUsername && password === storedPassword) {
+            alert("ברוך הבא, " + localStorage.getItem("nickname"));
+            // כאן ניתן להפנות את המשתמש לדף הבית או לדף אחר באתר לאחר ההתחברות
+            window.location = 'previwe.html';
+        } else {
+            alert("שם המשתמש או הסיסמא שגויים");
+        }
+    }
+
+  function move(){
+        window.location ="register.html"}
+
+
+
+
+</script>
+
+</body>
+</html>
